@@ -67,13 +67,17 @@ else:
         "USE_ICD_LOADER",
         ]
     )
-    opencl_include_dir = os.environ.get('OpenCL_INCLUDE_DIR')
-    if opencl_include_dir:
-        env.Append(CPPDEFINES=[opencl_include_dir])
+    if env["platform"] == "windows":
+        opencl_include_dir = os.environ.get('OpenCL_INCLUDE_DIR')
+        if opencl_include_dir:
+            env.Append(CPPDEFINES=[opencl_include_dir])
 
-    opencl_library = os.environ.get('OpenCL_LIBRARY')
-    if opencl_library:
-        env.Append(LIBS=[opencl_library])
+        opencl_library = os.environ.get('OpenCL_LIBRARY')
+        if opencl_library:
+            env.Append(LIBS=[opencl_library])
+    else:
+        env.Append(LIBS=["OpenCL"])
+        env.Append(CPPDEFINES=["_GNU_SOURCE"])
 
     clblast_sources = [
         "thirdparty/clblast/src/database/database.cpp",
